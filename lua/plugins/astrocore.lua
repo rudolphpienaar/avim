@@ -72,13 +72,6 @@ return {
           desc = "Show diagnostics in float",
         },
 
-        ["<A-i>"] = {
-          function()
-            require("astrocore").toggle_term_ui_select({ cmd = "zsh -l", direction = "float" })
-          end,
-          desc = "Floating terminal (login zsh)",
-        },
-
         -- mappings seen under group name "Buffer"
         ["<Leader>bd"] = {
           function()
