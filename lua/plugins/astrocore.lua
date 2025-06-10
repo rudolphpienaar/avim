@@ -72,6 +72,25 @@ return {
           desc = "Show diagnostics in float",
         },
 
+        ["<Leader>ld"] = {
+          function()
+            local buf = vim.api.nvim_create_buf(false, true)
+            local diagnostics = vim.diagnostic.get(0)
+            local lines = {}
+            local filename = vim.api.nvim_buf_get_name(0)
+            for _, d in ipairs(diagnostics) do
+              local clean_msg = d.message:gsub("\n", " "):gsub("\r", " ")
+              table.insert(lines, string.format("%s:%d:%d: %s", filename, d.lnum + 1, d.col + 1, clean_msg))
+            end
+            vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
+            vim.bo[buf].bufhidden = "wipe"
+            vim.bo[buf].filetype = "diagnostic"
+            vim.cmd("vsplit")
+            vim.api.nvim_set_current_buf(buf)
+          end,
+          desc = "Show diagnostics in editable split",
+        },
+
         -- mappings seen under group name "Buffer"
         ["<Leader>bd"] = {
           function()

@@ -30,3 +30,6 @@ require("lazy").setup({
     },
   },
 } --[[@as LazyConfig]])
+
+require("user")
+
