@@ -25,3 +25,9 @@ end
 
 require "lazy_setup"
 require "polish"
+
+-- Re-enable netrw so sftp/scp URIs work in AstroNvim
+vim.g.loaded_netrw = nil
+vim.g.loaded_netrwPlugin = nil
+vim.cmd('runtime! plugin/netrwPlugin.vim')
+
