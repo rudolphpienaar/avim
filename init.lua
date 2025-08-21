@@ -31,3 +31,8 @@ vim.g.loaded_netrw = nil
 vim.g.loaded_netrwPlugin = nil
 vim.cmd('runtime! plugin/netrwPlugin.vim')
 
+
+-- init.lua
+vim.opt.clipboard = "unnamedplus"        -- make yanks use +
+vim.g.clipboard = 'osc52'                -- force built-in OSC52 provider
+
