@@ -26,13 +26,13 @@ return {
             " █████  ███████ ████████ ██████    ██████ ",
             "██   ██ ██         ██    ██   ██ ██    ██",
             "███████ ███████    ██    ██████  ██    ██",
-            "██   ██       ██    ██    ██   ██ ██    ██",
+            "██   ██      ██    ██    ██   ██ ██    ██",
             "██   ██ ███████    ██    ██   ██  ██████ ",
             "",
-            "███     ██ ██     ██ ██ ███     ███",
-            "████    ██ ██     ██ ██ ████  ████",
-            "██ ██   ██ ██     ██ ██ ██ ████ ██",
-            "██  ██  ██  ██   ██  ██ ██  ██  ██",
+            "███   ██ ██     ██ ██ ███     ███",
+            "████  ██ ██     ██ ██ ████  ████",
+            "██ ██ ██ ██     ██ ██ ██ ████ ██",
+            "██  ████  ██   ██  ██ ██  ██  ██",
             "██   ████   ████   ██ ██      ██",
           }, "\n"),
         },
@@ -108,9 +108,7 @@ return {
         end,
       })
 
-      -- ##############################################################
-      -- ## ADDED: Keymap to copy diagnostics                      ##
-      -- ##############################################################
+      -- Keymap to copy diagnostics
       vim.keymap.set("n", "<Leader>cy", function()
         -- Use the standard vim.diagnostic.get() function
         -- It gets diagnostics for the current buffer (0) and filters by the current line number
@@ -133,6 +131,24 @@ return {
       end, { desc = "Copy Diagnostic to Clipboard" })
 
     end,
- },
+  },
+
+  -- ########################################################
+  -- ## ADDED: Override for indentation settings           ##
+  -- ########################################################
+  {
+    "AstroNvim/astrocore",
+    ---@type AstroCoreOpts
+    opts = {
+      options = {
+        opt = {
+          tabstop = 4,
+          shiftwidth = 4,
+          softtabstop = 4,
+          expandtab = true,
+        },
+      },
+    },
+  },
 
 }
