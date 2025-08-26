@@ -1,5 +1,3 @@
-if true then return {} end -- WARN: REMOVE THIS LINE TO ACTIVATE THIS FILE
-
 -- You can also add or configure plugins by creating files in this `plugins/` folder
 -- PLEASE REMOVE THE EXAMPLES YOU HAVE NO INTEREST IN BEFORE ENABLING THIS FILE
 -- Here are some examples:
@@ -25,17 +23,17 @@ return {
       dashboard = {
         preset = {
           header = table.concat({
-            " █████  ███████ ████████ ██████   ██████ ",
+            " █████  ███████ ████████ ██████    ██████ ",
             "██   ██ ██         ██    ██   ██ ██    ██",
             "███████ ███████    ██    ██████  ██    ██",
-            "██   ██      ██    ██    ██   ██ ██    ██",
+            "██   ██       ██    ██    ██   ██ ██    ██",
             "██   ██ ███████    ██    ██   ██  ██████ ",
             "",
-            "███    ██ ██    ██ ██ ███    ███",
-            "████   ██ ██    ██ ██ ████  ████",
-            "██ ██  ██ ██    ██ ██ ██ ████ ██",
-            "██  ██ ██  ██  ██  ██ ██  ██  ██",
-            "██   ████   ████   ██ ██      ██",
+            "███     ██ ██     ██ ██ ███     ███",
+            "████    ██ ██     ██ ██ ████  ████",
+            "██ ██   ██ ██     ██ ██ ██ ████ ██",
+            "██  ██  ██  ██   ██  ██ ██  ██  ██",
+            "██   ████   ████   ██ ██      ██",
           }, "\n"),
         },
       },
@@ -85,4 +83,56 @@ return {
       )
     end,
   },
+  {
+    "neovim/nvim-lspconfig",
+    config = function(plugin, opts)
+      -- First, run the default AstronVim lspconfig setup to keep all other LSPs working
+      require "astronvim.plugins.configs.lspconfig"(plugin, opts)
+
+      -- Now, add our custom filetypes and autocommand for Tcl
+      vim.filetype.add {
+        pattern = {
+          ['.*.xdc'] = 'xdc',
+          ['.*.upf'] = 'upf',
+        },
+      }
+
+      vim.api.nvim_create_autocmd('FileType', {
+        pattern = 'tcl,sdc,xdc,upf',
+        callback = function(args)
+          vim.lsp.start({
+            name = 'tclint',
+            cmd = {'tclsp'},
+            root_dir = vim.fs.root(args.buf, {'tclint.toml', '.tclint', 'pyproject.toml'}),
+          })
+        end,
+      })
+
+      -- ##############################################################
+      -- ## ADDED: Keymap to copy diagnostics                      ##
+      -- ##############################################################
+      vim.keymap.set("n", "<Leader>cy", function()
+        -- Use the standard vim.diagnostic.get() function
+        -- It gets diagnostics for the current buffer (0) and filters by the current line number
+        local diagnostics = vim.diagnostic.get(0, { lnum = vim.fn.line(".") - 1 })
+        if not vim.tbl_isempty(diagnostics) then
+          local messages = {}
+          for _, d in ipairs(diagnostics) do
+            table.insert(messages, d.message)
+          end
+          local full_message = table.concat(messages, "\n")
+
+          -- Set the system clipboard register (+) with the message
+          vim.fn.setreg("+", full_message)
+
+          -- Print a confirmation
+          print("Copied diagnostic to clipboard.")
+        else
+          print("No diagnostic on this line to copy.")
+        end
+      end, { desc = "Copy Diagnostic to Clipboard" })
+
+    end,
+ },
+
 }
