@@ -1,3 +1,54 @@
+-- init.lua
+
+-- UNIFIED clipboard: Wayland→wl-clipboard, X11→xclip, SSH→osc52 (override via NVIM_CLIP=wl|x11|osc52)
+local has = function(bin) return vim.fn.executable(bin) == 1 end
+local env = vim.env
+local prefer      = env.NVIM_CLIP                    -- optional override: "wl" | "x11" | "osc52"
+local is_wayland  = env.WAYLAND_DISPLAY ~= nil
+local has_display = env.DISPLAY ~= nil               -- X11/XWayland present
+local is_ssh      = (env.SSH_TTY or env.SSH_CONNECTION) ~= nil
+
+local WL = {
+  name = "wl-clipboard",
+  copy  = { ["+"] = { "wl-copy" }, ["*"] = { "wl-copy", "--primary" } },
+  paste = { ["+"] = { "wl-paste", "-n" }, ["*"] = { "wl-paste", "--primary", "-n" } },
+  cache_enabled = 0,
+}
+local X11 = {
+  name = "xclip",
+  copy  = {
+    ["+"] = { "xclip", "-selection", "clipboard" },
+    ["*"] = { "xclip", "-selection", "primary"   },
+  },
+  paste = {
+    ["+"] = { "xclip", "-selection", "clipboard", "-o" },
+    ["*"] = { "xclip", "-selection", "primary",   "-o" },
+  },
+  cache_enabled = 0,
+}
+
+if     prefer == "wl"   and has("wl-copy") and has("wl-paste") then
+  vim.g.clipboard = WL
+elseif prefer == "x11"  and has("xclip") then
+  vim.g.clipboard = X11
+elseif prefer == "osc52" then
+  vim.g.clipboard = "osc52"
+elseif is_wayland and has("wl-copy") and has("wl-paste") then
+  vim.g.clipboard = WL
+elseif has_display and has("xclip") then
+  vim.g.clipboard = X11
+elseif is_ssh then
+  vim.g.clipboard = "osc52"
+elseif has("xclip") then
+  vim.g.clipboard = X11
+elseif has("wl-copy") and has("wl-paste") then
+  vim.g.clipboard = WL
+else
+  vim.g.clipboard = "osc52"
+end
+
+vim.opt.clipboard = "unnamedplus"  -- route unnamed yanks to CLIPBOARD
+
 -- This file simply bootstraps the installation of Lazy.nvim and then calls other files for execution
 -- This file doesn't necessarily need to be touched, BE CAUTIOUS editing this file and proceed at your own risk.
 --
@@ -83,9 +134,4 @@ require "polish"
 vim.g.loaded_netrw = nil
 vim.g.loaded_netrwPlugin = nil
 vim.cmd('runtime! plugin/netrwPlugin.vim')
-
-
--- init.lua
-vim.opt.clipboard = "unnamedplus"        -- make yanks use +
-vim.g.clipboard = 'osc52'                -- force built-in OSC52 provider
 
