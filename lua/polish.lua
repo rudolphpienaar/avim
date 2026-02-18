@@ -1,5 +1,6 @@
 return {
   polish = function()
+    vim.opt.clipboard = ""  -- disable auto system clipboard on yank
     -- Diagnostic signs
     local signs = {
       Error = "",

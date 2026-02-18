@@ -47,7 +47,7 @@ else
   vim.g.clipboard = "osc52"
 end
 
-vim.opt.clipboard = "unnamedplus"  -- route unnamed yanks to CLIPBOARD
+vim.opt.clipboard = ""  -- disable automatic system clipboard routing
 
 -- This file simply bootstraps the installation of Lazy.nvim and then calls other files for execution
 -- This file doesn't necessarily need to be touched, BE CAUTIOUS editing this file and proceed at your own risk.
@@ -96,7 +96,7 @@ else
   local tf = vim.g.termfeatures or {}; tf.osc52 = true; vim.g.termfeatures = tf
 end
 
-vim.opt.clipboard = "unnamedplus"
+vim.opt.clipboard = ""
 
 -- If we selected a concrete provider, prevent OSC52 auto-detect from overriding it
 if vim.g.clipboard ~= nil then
@@ -135,3 +135,8 @@ vim.g.loaded_netrw = nil
 vim.g.loaded_netrwPlugin = nil
 vim.cmd('runtime! plugin/netrwPlugin.vim')
 
+
+-- clipfix force: prevent unnamedplus from being re-enabled later
+vim.schedule(function()
+  vim.opt.clipboard = ""
+end)
