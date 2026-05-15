@@ -1,5 +1,3 @@
-if true then return {} end -- WARN: REMOVE THIS LINE TO ACTIVATE THIS FILE
-
 -- AstroLSP allows you to customize the features in AstroNvim's LSP configuration engine
 -- Configuration documentation can be found with `:h astrolsp`
 -- NOTE: We highly recommend setting up the Lua Language Server (`:LspInstall lua_ls`)
@@ -44,7 +42,35 @@ return {
     -- customize language server configuration options passed to `lspconfig`
     ---@diagnostic disable: missing-fields
     config = {
-      -- clangd = { capabilities = { offsetEncoding = "utf-8" } },
+      clangd = {
+        init_options = (function()
+          local fallbackFlags = {}
+          local handle = io.popen [[zsh -lc 'echo | gcc -E -Wp,-v -x c - 2>&1']]
+          if handle then
+            local output = handle:read "*a"
+            handle:close()
+            local capture = false
+            for line in output:gmatch "[^\r\n]+" do
+              if line:match "^#include <...> search starts here:$" then
+                capture = true
+              elseif line:match "^End of search list%.$" then
+                capture = false
+              elseif capture then
+                local path = line:match "^%s*(/.-)%s*$"
+                if path then
+                  table.insert(fallbackFlags, "-isystem")
+                  table.insert(fallbackFlags, path)
+                end
+              end
+            end
+          end
+          return { fallbackFlags = fallbackFlags }
+        end)(),
+        cmd = {
+          vim.fn.expand "$HOME/.local/share/avim/mason/bin/clangd",
+          "--query-driver=/etc/profiles/per-user/rudolph/bin/gcc,/etc/profiles/per-user/rudolph/bin/g++,/run/current-system/sw/bin/gcc,/run/current-system/sw/bin/g++",
+        },
+      },
     },
     -- customize how language servers are attached
     handlers = {

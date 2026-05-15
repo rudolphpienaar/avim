@@ -11,7 +11,7 @@ return {
   opts = {
     -- Configure core features of AstroNvim
     features = {
-      large_buf = { size = 1024 * 256, lines = 10000 }, -- set global limits for large files for disabling features like treesitter
+      large_buf = { size = 1024 * 1024 * 8, lines = 100000 }, -- set global limits for large files for disabling features like treesitter
       autopairs = true, -- enable autopairs at start
       cmp = true, -- enable completion at start
       diagnostics = { virtual_text = false, virtual_lines = false, underline = true, signs = true, update_in_insert = false, severity_sort = true }, -- diagnostic settings on startup
