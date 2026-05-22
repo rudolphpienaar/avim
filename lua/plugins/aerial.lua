@@ -1,6 +1,9 @@
 ---@type LazySpec
 return {
   "stevearc/aerial.nvim",
+  version = false,
+  branch = "master",
+  pin = false,
   event = "LspAttach",
   opts = {
     layout = {
@@ -33,4 +36,3 @@ return {
     },
   },
 }
-
