@@ -21,9 +21,9 @@ return {
       },
     }
 
-    -- PDF viewer: zathura not available on this Termux install;
-    -- "general" opens with xdg-open / whatever $PDFVIEWER is set to
+    -- PDF viewer: evince supports SyncTeX on Termux-X11
     vim.g.vimtex_view_method = "general"
+    vim.g.vimtex_view_general_viewer = "evince"
 
     -- Disable vimtex imaps — LuaSnip handles all snippet expansion
     vim.g.vimtex_imaps_enabled = 0
