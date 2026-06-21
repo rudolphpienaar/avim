@@ -3,7 +3,7 @@ return {
   "iamcco/markdown-preview.nvim",
   ft = { "markdown" },
   cmd = { "MarkdownPreview", "MarkdownPreviewToggle", "MarkdownPreviewStop" },
-  build = function() vim.fn["mkdp#util#install"]() end,
+  build = "cd app && npm install",
   -- set globals before the plugin loads
   init = function()
     vim.cmd([[
