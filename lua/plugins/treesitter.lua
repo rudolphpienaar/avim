@@ -10,10 +10,11 @@ return {
       "python",
       "bibtex",  -- .bib bibliography files
     },
+    -- Disable auto-install: the latex parser's highlight queries reference
+    -- curly_group_text nodes absent from the installed grammar on Termux,
+    -- causing errors. Vimtex handles latex syntax instead.
+    auto_install = false,
     highlight = {
-      -- latex parser is installed but its highlight queries reference nodes
-      -- (curly_group_text) that don't exist in the installed grammar version.
-      -- Vimtex handles latex syntax highlighting instead.
       disable = { "latex" },
     },
   },

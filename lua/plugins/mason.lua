@@ -16,8 +16,8 @@ return {
         -- debuggers
         "debugpy",
 
-        -- other
-        "tree-sitter-cli",
+        -- tree-sitter-cli: pre-built linux binary doesn't run on Android bionic;
+        -- system pkg tree-sitter is symlinked into mason/bin instead
       },
     },
   },
