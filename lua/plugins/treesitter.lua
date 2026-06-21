@@ -8,6 +8,8 @@ return {
       "lua",
       "vim",
       "python",
+      "latex",   -- syntax highlighting for .tex files
+      "bibtex",  -- .bib bibliography files
     },
   },
 }
