@@ -21,8 +21,9 @@ return {
       },
     }
 
-    -- PDF viewer with SyncTeX (set to "general" if zathura not available)
-    vim.g.vimtex_view_method = "zathura"
+    -- PDF viewer: zathura not available on this Termux install;
+    -- "general" opens with xdg-open / whatever $PDFVIEWER is set to
+    vim.g.vimtex_view_method = "general"
 
     -- Disable vimtex imaps — LuaSnip handles all snippet expansion
     vim.g.vimtex_imaps_enabled = 0
