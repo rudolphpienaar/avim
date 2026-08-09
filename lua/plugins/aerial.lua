@@ -12,7 +12,10 @@ return {
       default_direction = "left", -- open on the left
     },
     show_guides = true,
-    backends = { "lsp", "treesitter", "markdown" },
+    backends = {
+      markdown = { "lsp", "markdown" },
+      _ = { "lsp", "treesitter", "markdown" },
+    },
     attach_mode = "window",
     filter_kind = false,
   },
