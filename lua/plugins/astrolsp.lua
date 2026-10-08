@@ -67,7 +67,7 @@ return {
           return { fallbackFlags = fallbackFlags }
         end)(),
         cmd = {
-          vim.fn.expand "$HOME/.local/share/avim/mason/bin/clangd",
+          vim.fn.expand "$HOME/.local/share/astronvim/mason/bin/clangd",
           "--query-driver=/etc/profiles/per-user/rudolph/bin/gcc,/etc/profiles/per-user/rudolph/bin/g++,/run/current-system/sw/bin/gcc,/run/current-system/sw/bin/g++",
         },
       },
