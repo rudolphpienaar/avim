@@ -1,0 +1,14 @@
+/* docutils-specific rules on top of water.css, for restview --css */
+body { max-width: 900px; }
+h1.title { font-size: 2.2rem; margin-bottom: 0.2em; }
+h1.title + p { margin-top: 0; }
+div.document > .section > h1,
+div.document > .section > h2 { border-bottom: 1px solid var(--border, #dbdbdb); padding-bottom: 0.3em; }
+pre.literal-block, pre.code { font-size: 0.9rem; line-height: 1.45; }
+tt.docutils, code.docutils, span.docutils.literal { font-size: 0.92em; padding: 0.1em 0.3em; }
+table.docutils { border-collapse: collapse; width: 100%; }
+table.docutils th, table.docutils td { vertical-align: top; }
+table.docutils thead { background: var(--background-alt, #f7f7f7); }
+div.admonition, div.note, div.warning { border-left: 4px solid var(--links, #0076d1); padding: 0.5em 1em; background: var(--background-alt, #f7f7f7); }
+div.system-message { border-left: 4px solid #d00; background: #fff4f4; padding: 0.5em 1em; }
+img { max-width: 100%; }

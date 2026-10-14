@@ -28,7 +28,14 @@ return {
         vim.notify("RstPreview: restview not found; run: uv tool install restview", vim.log.levels.WARN)
         return
       end
-      vim.fn.jobstart({ restview, vim.fn.expand "%:p" }, { detach = true })
+      -- docutils' default stylesheet is 1990s; water.css plus a few docutils rules
+      local assets = vim.fn.stdpath "config" .. "/assets"
+      vim.fn.jobstart({
+        restview,
+        "--css", assets .. "/water.css",
+        "--css", assets .. "/rst.css",
+        vim.fn.expand "%:p",
+      }, { detach = true })
     end, { desc = "Preview the current rst file in a browser, reloading on save" })
     vim.api.nvim_create_autocmd("FileType", {
       pattern = "rst",
