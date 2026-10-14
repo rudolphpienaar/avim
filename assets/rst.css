@@ -12,3 +12,10 @@ table.docutils thead { background: var(--background-alt, #f7f7f7); }
 div.admonition, div.note, div.warning { border-left: 4px solid var(--links, #0076d1); padding: 0.5em 1em; background: var(--background-alt, #f7f7f7); }
 div.system-message { border-left: 4px solid #d00; background: #fff4f4; padding: 0.5em 1em; }
 img { max-width: 100%; }
+
+/* mvp.css lays a section out as a centred flex row; a README reads as a left-aligned column */
+section { display: block; }
+h1, h2, h3, h4, h5, h6 { text-align: left; }
+table.docutils { margin-left: 0; width: auto; }
+pre.literal-block, pre.code { margin-left: 0; }
+table.docutils th, table.docutils td { text-align: left; }

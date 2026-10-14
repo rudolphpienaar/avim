@@ -28,11 +28,12 @@ return {
         vim.notify("RstPreview: restview not found; run: uv tool install restview", vim.log.levels.WARN)
         return
       end
-      -- docutils' default stylesheet is 1990s; water.css plus a few docutils rules
+      -- docutils' default stylesheet is 1990s; mvp.css plus a few docutils rules.
+      -- water.css is in assets too; swap the first --css to use it.
       local assets = vim.fn.stdpath "config" .. "/assets"
       vim.fn.jobstart({
         restview,
-        "--css", assets .. "/water.css",
+        "--css", assets .. "/mvp.css",
         "--css", assets .. "/rst.css",
         vim.fn.expand "%:p",
       }, { detach = true })
