@@ -84,12 +84,13 @@ return {
     end,
   },
   {
-    "neovim/nvim-lspconfig",
-    config = function(plugin, opts)
-      -- First, run the default AstronVim lspconfig setup to keep all other LSPs working
-      require "astronvim.plugins.configs.lspconfig"(plugin, opts)
-
-      -- Now, add our custom filetypes and autocommand for Tcl
+    -- Tcl filetypes, the tclint server, and a diagnostics-to-clipboard
+    -- mapping. AstroNvim v6 has no lspconfig config module to call (servers
+    -- are vim.lsp.config/enable through astrolsp), so this hangs off
+    -- astrocore instead of nvim-lspconfig.
+    "AstroNvim/astrocore",
+    ---@param opts AstroCoreOpts
+    opts = function(_, opts)
       vim.filetype.add {
         pattern = {
           ['.*.xdc'] = 'xdc',
@@ -97,19 +98,28 @@ return {
         },
       }
 
-      vim.api.nvim_create_autocmd('FileType', {
-        pattern = 'tcl,sdc,xdc,upf',
-        callback = function(args)
-          vim.lsp.start({
-            name = 'tclint',
-            cmd = {'tclsp'},
-            root_dir = vim.fs.root(args.buf, {'tclint.toml', '.tclint', 'pyproject.toml'}),
-          })
-        end,
-      })
+      opts.autocmds = opts.autocmds or {}
+      opts.autocmds.tclint = {
+        {
+          event = "FileType",
+          pattern = { "tcl", "sdc", "xdc", "upf" },
+          desc = "Start tclint for Tcl-family buffers",
+          callback = function(args)
+            if vim.fn.executable "tclsp" == 1 then
+              vim.lsp.start {
+                name = "tclint",
+                cmd = { "tclsp" },
+                root_dir = vim.fs.root(args.buf, { "tclint.toml", ".tclint", "pyproject.toml" }),
+              }
+            end
+          end,
+        },
+      }
 
       -- Keymap to copy diagnostics
-      vim.keymap.set("n", "<Leader>cy", function()
+      opts.mappings = opts.mappings or {}
+      opts.mappings.n = opts.mappings.n or {}
+      opts.mappings.n["<Leader>cy"] = { function()
         -- Use the standard vim.diagnostic.get() function
         -- It gets diagnostics for the current buffer (0) and filters by the current line number
         local diagnostics = vim.diagnostic.get(0, { lnum = vim.fn.line(".") - 1 })
@@ -128,8 +138,9 @@ return {
         else
           print("No diagnostic on this line to copy.")
         end
-      end, { desc = "Copy Diagnostic to Clipboard" })
+      end, desc = "Copy Diagnostic to Clipboard" }
 
+      return opts
     end,
   },
 
