@@ -19,3 +19,9 @@ h1, h2, h3, h4, h5, h6 { text-align: left; }
 table.docutils { margin-left: 0; width: auto; }
 pre.literal-block, pre.code { margin-left: 0; }
 table.docutils th, table.docutils td { text-align: left; }
+table, table th, table td { text-align: left; }
+table { margin-left: 0; }
+
+/* restview renders with docutils' html4 writer: div.document, not main; give it the page frame mvp gives main */
+body { margin: 0 auto; padding: 1rem 2rem; max-width: 900px; }
+pre.literal-block, pre.code, pre.doctest-block { background: var(--color-bg-secondary, #f0f8ff); border-radius: var(--border-radius, 5px); padding: 1rem 1.5rem; margin: 1rem 0; }
