@@ -13,6 +13,30 @@ return {
       vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
     end
 
+    -- reStructuredText preview through restview (docutils in a browser, the
+    -- renderer PyPI uses; reloads on save). Install once: uv tool install restview
+    local function restview_find()
+      local found = vim.fn.exepath "restview"
+      if found ~= "" then return found end
+      local home = vim.fn.expand "~/.local/bin/restview"
+      if vim.fn.executable(home) == 1 then return home end
+      return nil
+    end
+    vim.api.nvim_create_user_command("RstPreview", function()
+      local restview = restview_find()
+      if not restview then
+        vim.notify("RstPreview: restview not found; run: uv tool install restview", vim.log.levels.WARN)
+        return
+      end
+      vim.fn.jobstart({ restview, vim.fn.expand "%:p" }, { detach = true })
+    end, { desc = "Preview the current rst file in a browser, reloading on save" })
+    vim.api.nvim_create_autocmd("FileType", {
+      pattern = "rst",
+      callback = function(event)
+        vim.keymap.set("n", "<Leader>cp", "<Cmd>RstPreview<CR>", { buffer = event.buf, desc = "Preview rst document" })
+      end,
+    })
+
     -- -- Underline styles for diagnostics
     -- vim.api.nvim_set_hl(0, "DiagnosticUnderlineError", { underline = true, sp = "Red" })
     -- vim.api.nvim_set_hl(0, "DiagnosticUnderlineWarn",  { underline = true, sp = "Yellow" })

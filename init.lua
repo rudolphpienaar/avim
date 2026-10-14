@@ -128,7 +128,7 @@ if not pcall(require, "lazy") then
 end
 
 require "lazy_setup"
-require "polish"
+require("polish").polish()
 
 -- Re-enable netrw so sftp/scp URIs work in AstroNvim
 vim.g.loaded_netrw = nil
